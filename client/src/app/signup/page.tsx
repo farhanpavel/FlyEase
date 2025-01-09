@@ -2,42 +2,52 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader/page";
+
 export default function Signup() {
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
-    // confirmpassword: "",
+    confirmpassword: "",
   });
   const router = useRouter();
-  const { name, email, password } = user;
+  const [isLogged, setLogged] = useState(false);
+  const { name, email, password, confirmpassword } = user;
+  const [isLoading, setLoading] = useState(true);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(user);
-    if (!email || !password || !name) {
+    if (!email || !password || !name || !confirmpassword) {
       alert("Please fill everything.");
       return;
     }
-
-    try {
-      const response = await fetch(`/api/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      if (!response.ok) {
-        alert("Server Error");
-        throw new Error("Failed to submit data");
-      } else {
-        router.push("/signin");
+    if (password == confirmpassword) {
+      try {
+        const response = await fetch(`/api/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password, name }),
+        });
+        if (!response.ok) {
+          alert("Server Error");
+          throw new Error("Failed to submit data");
+        } else {
+          setLogged(true);
+          setTimeout(() => {
+            router.push("/signin");
+          }, 2000);
+        }
+      } catch (err) {
+        console.log("error", err);
       }
-    } catch (err) {
-      console.log("error", err);
+    } else {
+      alert("Password Doesnot Match");
     }
   };
 
@@ -86,6 +96,7 @@ export default function Signup() {
                   name="confirmpassword"
                   className="border border-gray-300 p-2 text-[#4a4a4a] rounded-[5px] bg-[#F0F4F4] focus:border focus:border-[#8B5FBF] focus:ring-[2px] focus:ring-[#8B5FBF] focus:outline-none"
                   placeholder="Confirm Password"
+                  onChange={handleChange}
                 />
 
                 <div className="space-x-3">
@@ -93,7 +104,7 @@ export default function Signup() {
                     type="submit"
                     className="px-6 py-2 bg-[#8B5FBF] w-1/2 text-white rounded-full mt-2"
                   >
-                    Create
+                    {isLogged ? <Loader /> : "Register"}
                   </button>
                 </div>
               </form>
