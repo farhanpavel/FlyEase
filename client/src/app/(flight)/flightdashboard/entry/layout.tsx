@@ -8,11 +8,11 @@ export default function Userlanding({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-wrap p-20 ">
-      <div className="w-[25%]">
+    <div className="lg:flex lg:flex-wrap p-20 ">
+      <div className="lg:w-[25%]">
         <FlightSidebar />
       </div>
-      <div className="w-[70%] ">{children}</div>
+      <div className="lg:w-[75%] mt-10 lg:mt-0">{children}</div>
     </div>
   );
 }

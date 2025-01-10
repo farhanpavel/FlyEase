@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Spinner from "@/components/Spinner/page";
 interface Flight {
   flightNumber: string;
   airline: string;
@@ -36,7 +37,11 @@ export default function Page() {
   }, []);
 
   if (!flight) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <Spinner />
+      </div>
+    );
   }
 
   return (

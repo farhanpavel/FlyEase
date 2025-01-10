@@ -5,15 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-
+import Cookies from "js-cookie";
 export function FlightPanel() {
   const pathname = usePathname();
-
+  const handleCookies = () => {
+    Cookies.remove("id");
+    Cookies.remove("flightid");
+  };
   return (
     <div className="flex  w-full flex-col ">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b border-gray-300  px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-6 md:text-sm lg:gap-10">
-          <Link href={"/flightdashboard/overview"}>
+          <Link href={"/flightdashboard/entry/schedule"}>
             <Image
               src={"/images/logo.png"}
               width={120}
@@ -21,20 +24,11 @@ export function FlightPanel() {
               alt="logo"
             />
           </Link>
-          <Link
-            href="/flightdashboard/overview"
-            className={`text-[#4a4a4a] transition-colors hover:text-[#8B5FBF] hover:transition-all hover:delay-200 ${
-              pathname === "/flightdashboard/overview"
-                ? "border-b-2 border-[#8B5FBF] "
-                : ""
-            }`}
-          >
-            Overview
-          </Link>
+
           <Link
             href="/flightdashboard/entry"
             className={`text-[#4a4a4a] transition-colors hover:text-[#8B5FBF]hover:transition-all hover:delay-200 ${
-              pathname && pathname.startsWith("/flightdashboard/entry")
+              pathname && pathname.startsWith("/flightdashboard/entry/schedule")
                 ? "border-b-2 border-[#8B5FBF]"
                 : ""
             }`}
@@ -53,11 +47,11 @@ export function FlightPanel() {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-[#8B5FBF]">
+          <SheetContent side="left" className="bg-white">
             <nav className="flex flex-col items-center gap-6 text-lg font-medium ">
-              <Link href={"/flightdashboard/overview"}>
+              <Link href={"/flightdashboard/entry/schedule"}>
                 <Image
-                  src={"/images/logo2.png"}
+                  src={"/images/logo.png"}
                   width={220}
                   height={100}
                   alt="logo"
@@ -65,19 +59,9 @@ export function FlightPanel() {
               </Link>
 
               <Link
-                href="/flightdashboard/overview"
-                className={`text-[#4a4a4a] transition-colors hover:text-[#8B5FBF]hover:transition-all hover:delay-200 ${
-                  pathname === "/flightdashboard/overview"
-                    ? "border-b-2 border-[#8B5FBF] "
-                    : ""
-                }`}
-              >
-                Overview
-              </Link>
-              <Link
-                href="/flightdashboard/entry"
+                href="/flightdashboard/entry/schedule"
                 className={`text-[#4a4a4a] transition-colors hover:text-[#8B5FBF] over:transition-all hover:delay-200 ${
-                  pathname === "/flightdashboard/entry"
+                  pathname === "/flightdashboard/entry/schedule"
                     ? "border-b-2 border-[#8B5FBF]"
                     : ""
                 }`}
@@ -95,6 +79,7 @@ export function FlightPanel() {
             <Link
               href={"/"}
               className="text-xs font-medium gap-x-1 text-[#4a4a4a] flex items-center hover:text-[#8B5FBF] hover:transition-all hover:delay-150"
+              onClick={handleCookies}
             >
               Logout
               <IoLogOutOutline className="text-2xl" />

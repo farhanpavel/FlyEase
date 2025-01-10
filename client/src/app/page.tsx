@@ -11,13 +11,13 @@ export default function Home() {
     <div>
       <div className="bg-[#F5F3F7]">
         <Header />
-        <div className="p-5 mt-10">
+        <div className="p-5 mt-10" id="home">
           <Hero />
         </div>
-        <div>
+        <div id="benefit">
           <Benefit />
         </div>
-        <div>
+        <div id="feature">
           <Feature />
         </div>
         <div>

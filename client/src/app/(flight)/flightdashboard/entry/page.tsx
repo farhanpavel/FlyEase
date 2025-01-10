@@ -6,7 +6,7 @@ export default function EntryPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/flightdashboard/entry");
+    router.replace("/flightdashboard/entry/schedule");
   }, [router]);
 
   return null;

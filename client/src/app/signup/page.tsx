@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader/page";
-
+import Cookies from "js-cookie";
 export default function Signup() {
   const [user, setUser] = useState({
     name: "",
@@ -18,6 +18,18 @@ export default function Signup() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    const id = Cookies.get("id");
+    if (id) {
+      router.push("/flightdashboard/entry/schedule");
+    } else {
+      setLoading(false);
+    }
+  });
+  if (isLoading) {
+    return <div></div>;
+  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(user);

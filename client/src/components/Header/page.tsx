@@ -1,11 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+import Cookies from "js-cookie";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isValid, setvalid] = useState<string | undefined>(undefined);
 
+  useEffect(() => {
+    setvalid(Cookies.get("id"));
+  }, []);
   return (
     <div className="flex justify-center font-rubik">
       <div className="fixed w-[90%] mt-2 lg:w-[70%] z-50 flex items-center justify-between p-2 bg-[#FAFAFA] shadow-xl rounded-lg">
@@ -45,9 +49,9 @@ export default function Header() {
                 px-4 py-2 min-h-[2.25rem] w-max text-md font-semibold 
                 text-[#8B5FBF]  transition-all duration-300 
                 hover:shadow-[0_4px_2px_-2px_rgba(128,0,128,0.6)]"
-                href=""
+                href="#home"
               >
-                Feature
+                Home
               </a>
             </li>
             <li>
@@ -56,7 +60,7 @@ export default function Header() {
                 px-4 py-2 min-h-[2.25rem] w-max text-md font-semibold 
                 text-[#8B5FBF]  transition-all duration-300 
                 hover:shadow-[0_4px_2px_-2px_rgba(128,0,128,0.6)]"
-                href=""
+                href="#benefit"
               >
                 Benefit
               </a>
@@ -67,9 +71,9 @@ export default function Header() {
                 px-4 py-2 min-h-[2.25rem] w-max text-md font-semibold 
                 text-[#8B5FBF] transition-all duration-300 
                 hover:shadow-[0_4px_2px_-2px_rgba(128,0,128,0.6)]"
-                href=""
+                href="#feature"
               >
-                How It Works
+                Feature
               </a>
             </li>
           </ul>
@@ -77,10 +81,10 @@ export default function Header() {
 
         <div className="hidden md:block">
           <Link
-            href="/signin"
+            href={isValid ? "/flightdashboard/entry/schedule" : "/signin"}
             className="bg-[#8B5FBF]  px-6 py-3 text-white rounded-full text-xs font-semibold 2xl:px-8 2xl:py-4"
           >
-            Login
+            {isValid ? "Dashboard" : "Login"}
           </Link>
         </div>
       </div>

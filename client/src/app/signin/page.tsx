@@ -9,9 +9,22 @@ export default function Signin() {
   const [user, setUser] = useState({ email: "", password: "" });
   const [isvalid, setvalid] = useState(false);
   const { email, password } = user;
+  const [isLoading, setLoading] = useState(true);
   const [isLogged, setLogged] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    const id = Cookies.get("id");
+    if (id) {
+      setLoading(true);
+      router.push("/flightdashboard/entry/schedule");
+    } else {
+      setLoading(false);
+    }
+  });
+  if (isLoading) {
+    return <div></div>;
+  }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser((x) => ({
       ...x,
@@ -44,7 +57,7 @@ export default function Signin() {
       setLogged(true);
       setTimeout(() => {
         Cookies.set("id", result.data.accessToken);
-        router.push("/flightdashboard/overview");
+        router.push("/flightdashboard/entry/schedule");
       }, 2000);
     } catch (err) {
       console.log("error", err);
