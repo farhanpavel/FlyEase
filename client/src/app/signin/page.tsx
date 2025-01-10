@@ -5,10 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader/page";
 import Cookies from "js-cookie";
+import { useForm } from "react-hook-form";
+interface SigninFormData {
+  email: string;
+  password: string;
+}
 export default function Signin() {
-  const [user, setUser] = useState({ email: "", password: "" });
-  const [isvalid, setvalid] = useState(false);
-  const { email, password } = user;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<SigninFormData>();
   const [isLoading, setLoading] = useState(true);
   const [isLogged, setLogged] = useState(false);
   const router = useRouter();
@@ -21,19 +29,15 @@ export default function Signin() {
     } else {
       setLoading(false);
     }
-  });
+  }, [router]);
+
   if (isLoading) {
     return <div></div>;
   }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser((x) => ({
-      ...x,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(user);
+
+  const onSubmit = async (data: any) => {
+    const { email, password } = data;
+
     if (!email || !password) {
       alert("Please fill in both email and password.");
       return;
@@ -43,16 +47,18 @@ export default function Signin() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
+        body: JSON.stringify({ email, password }),
       });
       if (!response.ok) {
         if (response.status === 401) {
-          setvalid(true);
+          setError("email", { type: "manual", message: "Invalid Email" });
+          setError("password", { type: "manual", message: "Invalid Password" });
         } else {
           throw new Error("invalid");
         }
         return;
       }
+
       const result = await response.json();
       setLogged(true);
       setTimeout(() => {
@@ -63,6 +69,7 @@ export default function Signin() {
       console.log("error", err);
     }
   };
+
   return (
     <div>
       <div className="min-h-screen flex items-center justify-center">
@@ -82,45 +89,51 @@ export default function Signin() {
             </div>
             <div className="2xl:w-3/4 w-full">
               <form
-                action=""
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-y-2"
-                onSubmit={handleSubmit}
               >
                 <input
                   type="email"
-                  name="email"
-                  className="border border-gray-300 p-2 text-[#4a4a4a] rounded-[5px] bg-[#F0F4F4] focus:border focus:border-[#8B5FBF] focus:ring-[2px] focus:ring-[#8B5FBF] focus:outline-none"
                   placeholder="Email"
-                  onChange={handleChange}
+                  className="border border-gray-300 p-2 text-[#4a4a4a] rounded-[5px] bg-[#F0F4F4] focus:border focus:border-[#8B5FBF] focus:ring-[2px] focus:ring-[#8B5FBF] focus:outline-none"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
+                  })}
                 />
-                {isvalid && (
+                {errors.email && (
                   <div className="text-left text-sm text-red-600 mx-1">
-                    <p>Invalid Email</p>
+                    <p>{errors.email.message}</p>
                   </div>
                 )}
                 <input
                   type="password"
-                  name="password"
-                  className="border border-gray-300 p-2 text-[#4a4a4a] rounded-[5px] bg-[#F0F4F4] focus:border focus:border-[#8B5FBF] focus:ring-[2px] focus:ring-[#8B5FBF] focus:outline-none"
                   placeholder="Password"
-                  onChange={handleChange}
+                  className="border border-gray-300 p-2 text-[#4a4a4a] rounded-[5px] bg-[#F0F4F4] focus:border focus:border-[#8B5FBF] focus:ring-[2px] focus:ring-[#8B5FBF] focus:outline-none"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
                 />
-                {isvalid && (
+                {errors.password && (
                   <div className="text-left text-sm text-red-600 mx-1">
-                    <p>Invalid Password</p>
+                    <p>{errors.password.message}</p>
                   </div>
                 )}
                 <div className="space-x-3">
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#8B5FBF] w-1/2 text-white  rounded-full mt-2"
+                    className="px-6 py-2 bg-[#8B5FBF]  w-1/2 text-white rounded-full mt-2"
                   >
                     {isLogged ? <Loader /> : "Login"}
                   </button>
                 </div>
               </form>
               <div>
-                <h1 className="text-sm  text-center mt-4">
+                <h1 className="text-sm text-center mt-4">
                   Forgot Password?{" "}
                   <Link href={"/signup"} className="font-bold text-[#8B5FBF]">
                     Signup

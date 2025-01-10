@@ -29,8 +29,8 @@ export default function Feature() {
           </div>
           <div>
             <p className="text-sm text-center sm:text-sm font-rubik text-[#4a4a4a] max-w-[80%] mx-auto">
-              Book flights effortlessly with Flyease's intuitive platform. Enjoy
-              personalized flight options and smooth booking in just a few
+              Book flights effortlessly with Flyease&apos;s intuitive platform.
+              Enjoy personalized flight options and smooth booking in just a few
               clicks.
             </p>
           </div>
