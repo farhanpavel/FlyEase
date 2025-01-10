@@ -1,10 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+import Cookies from "js-cookie";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isValid, setvalid] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setvalid(Cookies.get("id"));
+  }, []);
 
   return (
     <div className="flex justify-center font-rubik">
@@ -76,20 +81,20 @@ export default function Header() {
 
           <div className="md:hidden mb-4 md:mb-0 flex justify-center w-full mt-4">
             <Link
-              href="/signin"
-              className="bg-[#8B5FBF] px-6 py-3 text-white rounded-full text-xs font-semibold 2xl:px-8 2xl:py-4"
+              href={isValid ? "/flightdashboard/entry/schedule" : "/signin"}
+              className="bg-[#8B5FBF]  px-6 py-3 text-white rounded-full text-xs font-semibold 2xl:px-8 2xl:py-4"
             >
-              Login
+              {isValid ? "Dashboard" : "Login"}
             </Link>
           </div>
         </div>
 
         <div className="hidden md:block">
           <Link
-            href="/signin"
+            href={isValid ? "/flightdashboard/entry/schedule" : "/signin"}
             className="bg-[#8B5FBF]  px-6 py-3 text-white rounded-full text-xs font-semibold 2xl:px-8 2xl:py-4"
           >
-            Login
+            {isValid ? "Dashboard" : "Login"}
           </Link>
         </div>
       </div>
