@@ -116,7 +116,7 @@ export default function Page() {
       </div>
 
       <div className="mt-8 text-center">
-        <button className="bg-[#8B5FBF] text-white py-2 px-6 rounded-lg hover:bg-[#6d4b92] transition-all duration-300">
+        <button className="bg-[#8B5FBF] text-white  py-2 px-6 rounded-lg hover:bg-[#6d4b92] transition-all duration-300">
           Book Now
         </button>
       </div>

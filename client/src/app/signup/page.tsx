@@ -47,7 +47,7 @@ export default function Signup() {
           body: JSON.stringify({ email, password, name }),
         });
         if (!response.ok) {
-          alert("Server Error");
+          alert("Dublication Data Found");
           throw new Error("Failed to submit data");
         } else {
           setLogged(true);
